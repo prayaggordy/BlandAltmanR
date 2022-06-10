@@ -16,9 +16,9 @@ ba_plot_worker <- function(df, measure, exts,
 
 	opts <- list(...)
 
-	scale_x <- list(limits = opts$xlim, breaks = opts$xbreaks, labels = opts$xlabels) %>% null.omit()
-	scale_y <- list(limits = opts$ylim, breaks = opts$ybreaks, labels = opts$ylabels) %>% null.omit()
-	all_labs <- list(xlab = opts$xlab, ylab = opts$ylab, title = opts$title) %>% null.omit()
+	scale_x <- list(limits = opts[["xlim"]], breaks = opts[["xbreaks"]], labels = opts[["xlabels"]]) %>% null.omit()
+	scale_y <- list(limits = opts[["ylim"]], breaks = opts[["ybreaks"]], labels = opts[["ylabels"]]) %>% null.omit()
+	all_labs <- list(x = opts[["xlab"]], y = opts[["ylab"]], title = opts[["title"]]) %>% null.omit()
 
 	d <- ba_plot_data(df = df, measure = measure, exts = exts, ...) %>%
 		tidyr::pivot_longer(-c(size, diffs),
