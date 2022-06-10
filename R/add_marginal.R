@@ -4,5 +4,5 @@ add_marginal <- function(p, ylim, rel_size = 5, ...) {
 		ggplot2::theme_void() +
 		ggplot2::scale_y_continuous(limits = ylim)
 
-	patchwork::wrap_plots(p + ggplot2::theme(plot.margin = margin(r = 0)), d, nrow = 1, widths = c(rel_size, 1))
+	patchwork::wrap_plots(p + ggplot2::theme(plot.margin = ggplot2::margin(r = 0)), d, nrow = 1, widths = c(rel_size, 1))
 }
