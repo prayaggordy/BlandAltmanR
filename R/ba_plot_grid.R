@@ -54,22 +54,22 @@ plot_indiv <- function(group_val_idx, df, measure, exts, group, scales, axes, ..
 
 	if (group_val_idx <= l - dims[2]) {
 		p <- p +
-			ggplot2::theme(axis.title.x = element_blank())
+			ggplot2::theme(axis.title.x = ggplot2::element_blank())
 		if (grepl("^remove(_x)?$", axes) &
 				!grepl("^free(_x)?$", scales)) {
 			p <- p +
-				ggplot2::theme(axis.text.x = element_blank(),
-											 axis.ticks.x = element_blank())
+				ggplot2::theme(axis.text.x = ggplot2::element_blank(),
+											 axis.ticks.x = ggplot2::element_blank())
 		}
 	}
 	if (group_val_idx %in% setdiff(seq(l), seq(1, l, by = dims[2]))) {
 		p <- p +
-			ggplot2::theme(axis.title.y = element_blank())
+			ggplot2::theme(axis.title.y = ggplot2::element_blank())
 		if (grepl("^remove(_y)?$", axes) &
 				!grepl("^free(_y)?$", scales)) {
 			p <- p +
-				ggplot2::theme(axis.text.y = element_blank(),
-											 axis.ticks.y = element_blank())
+				ggplot2::theme(axis.text.y = ggplot2::element_blank(),
+											 axis.ticks.y = ggplot2::element_blank())
 		}
 	}
 
