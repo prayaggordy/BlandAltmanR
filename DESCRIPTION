@@ -5,8 +5,8 @@ Authors@R:
     person("Prayag", "Gordy", , "prayaggordy@gmail.com", role = c("aut", "cre"))
 Description: View the underlying data and calculations for a Bland Altman plot's
     points, primary regression line, and limits of agreement. Generate single
-    plots or a multiplot faceted on a categorical feature. Based on Menghini,
-    et. al.
+    plots or a multiplot faceted on a categorical feature. Based on Menghini et 
+    al. (2021) <https://academic.oup.com/sleep/article/44/2/zsaa170/5901094>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
