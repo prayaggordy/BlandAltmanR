@@ -25,13 +25,13 @@ mean_diff_pbT <- function(df, m, opts) {
 				fitted %>%
 					magrittr::set_colnames(c("m_l", "m_u"))
 			) %>%
-			dplyr::mutate(m_m = predict(m, newdata = data.frame(size = df$size)))
+			dplyr::mutate(m_m = stats::predict(m, newdata = data.frame(size = df$size)))
 	}
 }
 
 mean_diff_pbF <- function(df) {
 	df %>%
-		dplyr::mutate(m_m = t.test(df$diffs)[["estimate"]],
-									m_l = t.test(df$diffs)[["conf.int"]][1],
-									m_u = t.test(df$diffs)[["conf.int"]][2])
+		dplyr::mutate(m_m = stats::t.test(df$diffs)[["estimate"]],
+									m_l = stats::t.test(df$diffs)[["conf.int"]][1],
+									m_u = stats::t.test(df$diffs)[["conf.int"]][2])
 }

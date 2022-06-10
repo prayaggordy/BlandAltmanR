@@ -18,10 +18,10 @@ ba_plot_data <- function(df, measure, exts, ...) {
 }
 
 full_opts <- function(df, measure, exts, ...) {
-	opts <- modifyList(list(exts = c("_device", "_ref"), xaxis = "mean", log_transf = F,
-													CI.type = "classic", CI.level = 0.95,
-													boot.type = "basic", boot.R = 1000),
-										 c(list(exts = exts), list(...)))
+	opts <- utils::modifyList(list(exts = c("_device", "_ref"), xaxis = "mean", log_transf = F,
+																 CI.type = "classic", CI.level = 0.95,
+																 boot.type = "basic", boot.R = 1000),
+														c(list(exts = exts), list(...)))
 
 	rlang::arg_match0(opts$xaxis, c("reference", "mean"))
 	rlang::arg_match0(opts$CI.type, c("classic", "boot"))
@@ -51,7 +51,7 @@ calculate_log_points <- function(g1, g2, xaxis, const = 1e-4) {
 }
 
 calculate_lines <- function(df, df_log, opts) {
-	m <- lm(diffs ~ size, df); mRes <- lm(abs(resid(lm(diffs ~ size))) ~ size, df)  # can't otherwise extract full mRes formula
+	m <- stats::lm(diffs ~ size, df); mRes <- stats::lm(abs(stats::resid(stats::lm(diffs ~ size))) ~ size, df)  # can't otherwise extract full mRes formula
 
 	pb <- check_b1(fit = m, df = df, opts = opts)
 	hs <- check_b1(fit = mRes, df = df, opts = opts)
@@ -68,9 +68,9 @@ check_b1 <- function(fit, df, opts) {
 	list2env(opts, envir = environment())
 
 	if (CI.type == "classic") {
-		ci <- confint(fit, level = CI.level)[2,]
+		ci <- stats::confint(fit, level = CI.level)[2,]
 	} else if (CI.type == "boot") {
-		ci <- boot::boot.ci(boot::boot(data = df, statistic = boot_b1, formula = formula(fit), R = boot.R),
+		ci <- boot::boot.ci(boot::boot(data = df, statistic = boot_b1, formula = stats::formula(fit), R = boot.R),
 												type = boot.type, conf = CI.level)[[boot.type]][4:5]
 	} else {
 		stop("Error: CI.type argument must be either 'classic' or 'boot'")
@@ -80,23 +80,23 @@ check_b1 <- function(fit, df, opts) {
 }
 
 predict_regular <- function(df, fit, CI.level) {
-	predict(fit, newdata = data.frame(size = df$size), interval="confidence", level = CI.level) %>%
+	stats::predict(fit, newdata = data.frame(size = df$size), interval="confidence", level = CI.level) %>%
 		tibble::as_tibble()
 }
 
 predict_boot <- function(df, fit, CI.level, boot.R) {
-	fitted <- t(replicate(boot.R, boot_lm(df = df, formula = formula(fit))))
+	fitted <- t(replicate(boot.R, boot_lm(df = df, formula = stats::formula(fit))))
 
-	apply(fitted, 2, quantile, probs = c((1 - CI.level)/2, CI.level + (1 - CI.level)/2)) %>%
+	apply(fitted, 2, stats::quantile, probs = c((1 - CI.level)/2, CI.level + (1 - CI.level)/2)) %>%
 		t() %>%
 		tibble::as_tibble()
 }
 
 boot_b1 <- function(df, formula, indices) {
-	coef(lm(formula, data = df[indices,]))[2]
+	stats::coef(stats::lm(formula, data = df[indices,]))[2]
 }
 
 boot_lm <- function(df, formula) {
 	indices <- sample(1:nrow(df), replace = T)
-	predict(lm(formula, data = df[indices,]), newdata = data.frame(size = df$size))
+	stats::predict(stats::lm(formula, data = df[indices,]), newdata = data.frame(size = df$size))
 }
