@@ -3,7 +3,7 @@ ba_plot <- function(df, measure, exts, ...) {
 
 	opts <- list(...)
 	if (is.null(opts$ylim)) {
-		opts$ylim <- ggplot_build(p)$layout$panel_params[[1]]$y.range
+		opts$ylim <- ggplot2::ggplot_build(p)$layout$panel_params[[1]]$y.range
 	}
 
 	rlang::exec(add_marginal, p = p, !!!opts)
@@ -26,13 +26,14 @@ ba_plot_worker <- function(df, measure, exts,
 		dplyr::mutate(color = as.character(stringr::str_starts(line, "m")),
 									linetype = as.character(stringr::str_ends(line, "m")))
 
-	ggplot(d, aes(x = size, y = diffs)) +
-		geom_line(aes(group = line, color = color, linetype = linetype, size = linetype, y = value), show.legend = F) +
-		geom_point(size = point_size) +
-		scale_color_manual(values = c("TRUE" = fit_color, "FALSE" = LOA_color)) +
-		scale_linetype_manual(values = c("TRUE" = 1, "FALSE" = 2)) +
-		scale_size_manual(values = c("TRUE" = fit_size, "FALSE" = ci_size)) +
-		rlang::exec(scale_x_continuous, !!!scale_x) +
-		rlang::exec(scale_y_continuous, !!!scale_y) +
-		rlang::exec(labs, !!!all_labs)
+	ggplot2::ggplot(d, ggplot2::aes(x = size, y = diffs)) +
+		ggplot2::geom_line(ggplot2::aes(group = line, color = color, linetype = linetype, size = linetype, y = value),
+											 show.legend = F) +
+		ggplot2::geom_point(size = point_size) +
+		ggplot2::scale_color_manual(values = c("TRUE" = fit_color, "FALSE" = LOA_color)) +
+		ggplot2::scale_linetype_manual(values = c("TRUE" = 1, "FALSE" = 2)) +
+		ggplot2::scale_size_manual(values = c("TRUE" = fit_size, "FALSE" = ci_size)) +
+		rlang::exec(ggplot2::scale_x_continuous, !!!scale_x) +
+		rlang::exec(ggplot2::scale_y_continuous, !!!scale_y) +
+		rlang::exec(ggplot2::labs, !!!all_labs)
 }
