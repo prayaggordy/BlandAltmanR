@@ -20,14 +20,16 @@ ba_plot_grid <- function(df, measure, exts, group,
 		scales_y <- build_scales(d, "y", ...)
 	}
 
+	opts <- list(...)
+	opts[c(names(scales_x), names(scales_y))] <- NULL
+
 	plots <- rlang::exec(
 		purrr::map,
 		seq(length(unique(df[[group]]))),
 		plot_indiv,
 		df = df, measure = measure, exts = exts, group = group,
 		scales = scales, axes = axes,
-		!!!scales_x, !!!scales_y,
-		...
+		!!!scales_x, !!!scales_y, !!!opts
 	)
 
 	patchwork::wrap_plots(plots)
