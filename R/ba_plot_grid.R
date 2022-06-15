@@ -83,7 +83,7 @@ build_scales <- function(d, xy, extend = 0.05, nbreaks = 5, digits = 2, ...) {
 
 	nam <- c(paste0(xy, "lim"), paste0(xy, "breaks"), paste0(xy, "labels"))
 
-	r <- range(d[[list(x = "size", y = "diffs")[[xy]]]]); rdiff <- abs((r[2] - r[1]))*extend
+	r <- opts[[nam[1]]] %||% range(d[[list(x = "size", y = "diffs")[[xy]]]]); rdiff <- abs((r[2] - r[1]))*extend
 	lims <- opts[[nam[1]]] %||% r + c(-rdiff, rdiff)
 	breaks <- opts[[nam[2]]] %||% labeling::extended(dmin = r[1], dmax = r[2], m = nbreaks)
 	label_text <- opts[[nam[3]]] %||% round(x = labeling::extended(dmin = r[1], dmax = r[2], m = nbreaks), digits = digits)
