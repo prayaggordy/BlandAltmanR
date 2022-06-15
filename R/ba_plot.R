@@ -1,3 +1,4 @@
+#' @export
 ba_plot <- function(df, measure, exts, ...) {
 	p <- ba_plot_worker(df = df, measure = measure, exts = exts, ...)
 

@@ -1,3 +1,4 @@
+#' @export
 ba_plot_grid <- function(df, measure, exts, group,
 												 include_all = T, all_lab = "All", title = "",
 												 scales = "fixed", axes = "remove", ...) {

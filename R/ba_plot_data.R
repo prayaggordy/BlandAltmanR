@@ -1,3 +1,4 @@
+#' @export
 ba_plot_data <- function(df, measure, exts, ...) {
 	opts <- full_opts(df, measure, exts, ...)
 	list2env(opts, envir = environment())
