@@ -3,18 +3,22 @@ ba_plot_data <- function(df, g1, g2, ...) {
 	opts <- full_opts(df, g1, g2, ...)
 	list2env(opts, envir = environment())
 
-	df <- df %>%
+	d <- df %>%
 		dplyr::filter(dplyr::if_all(c(g1, g2), ~ !is.na(.)))
 
+	if (nrow(df) - nrow(d) > 0) {
+		warning("Removed ", nrow(df) - nrow(d), " rows with missing values for ", g1, " or ", g2)
+	}
+
 	ba <- calculate_points(
-		g1 = df[[g1]],
-		g2 = df[[g2]],
+		g1 = d[[g1]],
+		g2 = d[[g2]],
 		xaxis = xaxis
 	)
 
 	ba_log <- calculate_log_points(
-		g1 = df[[g1]],
-		g2 = df[[g2]],
+		g1 = d[[g1]],
+		g2 = d[[g2]],
 		xaxis = xaxis
 	)
 
