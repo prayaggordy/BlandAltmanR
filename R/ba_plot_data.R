@@ -44,10 +44,8 @@ full_opts <- function(df, g1, g2, ...) {
 calculate_points <- function(g1, g2, xaxis) {
 	if (xaxis == "mean") {
 		data.frame(size = (g1 + g2)/2, diffs = g1 - g2)  # rename size to x, diffs to y
-	} else if (xaxis == "reference") {
-		data.frame(size = g2, diffs = g1 - g2)
 	} else {
-		stop("Error: xaxis argument must be either 'reference' or 'mean'")
+		data.frame(size = g2, diffs = g1 - g2)
 	}
 }
 
