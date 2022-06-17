@@ -7,7 +7,7 @@ ba_plot_data <- function(df, g1, g2, ...) {
 		dplyr::filter(dplyr::if_all(c(g1, g2), ~ !is.na(.)))
 
 	if (nrow(df) - nrow(d) > 0) {
-		warning("Removed ", nrow(df) - nrow(d), " rows with missing values for ", g1, " or ", g2)
+		warning("Removed ", nrow(df) - nrow(d), " row(s) containing missing values in ", g1, " or ", g2)
 	}
 
 	ba <- calculate_points(
