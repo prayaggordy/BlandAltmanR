@@ -45,8 +45,8 @@ calculate_points <- function(g1, g2, xaxis) {
 }
 
 calculate_log_points <- function(g1, g2, xaxis, const = 1e-4) {
-	calculate_points(g1 = log(g1 + const),
-									 g2 = log(g2 + const),
+	calculate_points(g1 = log(abs(g1) + const)*sign(g1),
+									 g2 = log(abs(g2) + const)*sign(g1),
 									 xaxis = xaxis)
 }
 
