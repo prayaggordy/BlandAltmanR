@@ -1,9 +1,24 @@
 #' @export
-ba_plot_grid <- function(df, g1, g2, group,
+ba_plot_grid <- function(df, g1, g2, group = "",
 												 include_all = T, all_lab = "All", title = "",
 												 scales = "fixed", axes = "remove", ...) {
 	rlang::arg_match0(scales, c("fixed", "free_x", "free_y", "free"))
 	rlang::arg_match0(axes, c("leave", "remove_x", "remove_y", "remove"))
+
+	if (group == "") {
+		if (length(g2) == 1) {
+			return(ba_plot(df, g1, g2, ...))
+		} else {
+			df <- df %>%
+				tidyr::pivot_longer(cols = g2)
+			group <- "name"
+			g2 <- "value"
+		}
+	} else {
+		if (length(g2) > 1) {
+			stop("Either `group` must be empty or `g2` must be a single column name")
+		}
+	}
 
 	if (include_all) {
 		df <- df %>%
