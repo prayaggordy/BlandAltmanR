@@ -10,11 +10,11 @@ ba_plot_data <- function(df, g1, g2, ...) {
 		warning("Removed ", nrow(df) - nrow(d), " row(s) containing missing values in ", g1, " or ", g2)
 	}
 
-	if (any(class(df[[g1]] == "POSIXt"))) {
-		if (sum(any(class(df[[g1]] == "POSIXt")), any(class(df[[g2]] == "POSIXt"))) == 1) {
-			stop("Both or neither of `g1`, `g2` must be POSIXt")
-		}
+	classes <- c(any(class(df[[g1]]) == "POSIXt"), any(class(df[[g2]]) == "POSIXt"))
 
+	if (sum(classes) == 1) {
+		stop("Both or neither of `g1`, `g2` must be POSIXt")
+	} else if (sum(classes) == 2) {
 		d <- d %>%
 			dplyr::mutate(dplyr::across(c(g1, g2), interval_mins))
 	}
@@ -31,7 +31,7 @@ ba_plot_data <- function(df, g1, g2, ...) {
 		xaxis = xaxis
 	)
 
-	if (any(class(df[[g1]] == "POSIXt"))) {
+	if (sum(classes) == 2) {
 		ba$size <- ba$size %% (24*60)
 		ba_log$size <- ba_log$size %% (24*60)
 	}
