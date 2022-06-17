@@ -4,14 +4,14 @@ ba_plot_data <- function(df, g1, g2, ...) {
 	list2env(opts, envir = environment())
 
 	ba <- calculate_points(
-		g1 = df %>% dplyr::pull(g1),
-		g2 = df %>% dplyr::pull(g2),
+		g1 = df[[g1]],
+		g2 = df[[g2]],
 		xaxis = xaxis
 	)
 
 	ba_log <- calculate_log_points(
-		g1 = df %>% dplyr::pull(g1),
-		g2 = df %>% dplyr::pull(g2),
+		g1 = df[[g1]],
+		g2 = df[[g2]],
 		xaxis = xaxis
 	)
 
