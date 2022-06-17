@@ -27,7 +27,7 @@ full_opts <- function(df, g1, g2, ...) {
 	rlang::arg_match0(opts$xaxis, c("reference", "mean"))
 	rlang::arg_match0(opts$CI.type, c("classic", "boot"))
 	rlang::arg_match0(opts$boot.type, c("norm", "basic", "stud", "perc", "bca", "all"))
-	assertthat::assert_that(length(g1) == length(g2) == 1)
+	assertthat::assert_that(all(length(g1) == 1, length(g2) == 1))
 	assertthat::assert_that(opts$CI.level > 0 & opts$CI.level < 1)
 	assertthat::assert_that(opts$boot.R %% 1 == 0)
 
