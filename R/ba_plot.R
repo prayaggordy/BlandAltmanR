@@ -1,6 +1,6 @@
 #' @export
-ba_plot <- function(df, measure, exts, ...) {
-	p <- ba_plot_worker(df = df, measure = measure, exts = exts, ...)
+ba_plot <- function(df, g1, g2, ...) {
+	p <- ba_plot_worker(df = df, g1 = g1, g2 = g2, ...)
 
 	opts <- list(...)
 	if (is.null(opts$ylim)) {
@@ -10,7 +10,7 @@ ba_plot <- function(df, measure, exts, ...) {
 	rlang::exec(add_marginal, p = p, !!!opts)
 }
 
-ba_plot_worker <- function(df, measure, exts,
+ba_plot_worker <- function(df, g1, g2,
 													 point_size = 1, fit_size = 1, ci_size = 1,
 													 fit_color = "red", LOA_color = "darkgray",
 													 ...) {
@@ -21,7 +21,7 @@ ba_plot_worker <- function(df, measure, exts,
 	scale_y <- list(limits = opts[["ylim"]], breaks = opts[["ybreaks"]], labels = opts[["ylabels"]]) %>% null.omit()
 	all_labs <- list(x = opts[["xlab"]], y = opts[["ylab"]], title = opts[["title"]]) %>% null.omit()
 
-	d <- ba_plot_data(df = df, measure = measure, exts = exts, ...) %>%
+	d <- ba_plot_data(df = df, g1 = g1, g2 = g2, ...) %>%
 		tidyr::pivot_longer(-c(size, diffs),
 												names_to = "line") %>%
 		dplyr::mutate(color = as.character(stringr::str_starts(line, "m")),

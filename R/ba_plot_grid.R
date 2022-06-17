@@ -1,5 +1,5 @@
 #' @export
-ba_plot_grid <- function(df, measure, exts, group,
+ba_plot_grid <- function(df, g1, g2, group,
 												 include_all = T, all_lab = "All", title = "",
 												 scales = "fixed", axes = "remove", ...) {
 	rlang::arg_match0(scales, c("fixed", "free_x", "free_y", "free"))
@@ -12,7 +12,7 @@ ba_plot_grid <- function(df, measure, exts, group,
 	}
 
 	# for each fixed axis, figure out the limits and breaks on the full df if not already given
-	d <- ba_plot_data(df, measure = measure, exts = exts, ...)
+	d <- ba_plot_data(df, g1 = g1, g2 = g2, ...)
 	scales_x <- scales_y <- list()
 	if (!grepl("^free(_x)?$", scales)) {  # x axis fixed
 		scales_x <- build_scales(d, "x", ...)
@@ -28,7 +28,7 @@ ba_plot_grid <- function(df, measure, exts, group,
 		purrr::map,
 		seq(length(unique(df[[group]]))),
 		plot_indiv,
-		df = df, measure = measure, exts = exts, group = group,
+		df = df, g1 = g1, g2 = g2, group = group,
 		scales = scales, axes = axes,
 		!!!scales_x, !!!scales_y, !!!opts
 	)
@@ -36,7 +36,7 @@ ba_plot_grid <- function(df, measure, exts, group,
 	patchwork::wrap_plots(plots)
 }
 
-plot_indiv <- function(group_val_idx, df, measure, exts, group, scales, axes, ...) {
+plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, ...) {
 	opts <- list(...)
 	list2env(opts, envir = environment())
 
@@ -45,7 +45,7 @@ plot_indiv <- function(group_val_idx, df, measure, exts, group, scales, axes, ..
 	p <- ba_plot_worker(df = df %>%
 												dplyr::filter(dplyr::if_any(dplyr::all_of(group),
 																										~ .x == group_val)),
-											measure = measure, exts = exts, title = group_val, ...)
+											g1 = g1, g2 = g2, title = group_val, ...)
 
 	if (!is.null(opts$theme_fn)) {
 		p <- p +

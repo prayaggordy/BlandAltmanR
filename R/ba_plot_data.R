@@ -1,34 +1,33 @@
 #' @export
-ba_plot_data <- function(df, measure, exts, ...) {
-	opts <- full_opts(df, measure, exts, ...)
+ba_plot_data <- function(df, g1, g2, ...) {
+	opts <- full_opts(df, g1, g2, ...)
 	list2env(opts, envir = environment())
 
 	ba <- calculate_points(
-		g1 = df %>% dplyr::pull(paste0(measure, exts[1])),
-		g2 = df %>% dplyr::pull(paste0(measure, exts[2])),
+		g1 = df %>% dplyr::pull(g1),
+		g2 = df %>% dplyr::pull(g2),
 		xaxis = xaxis
 	)
 
 	ba_log <- calculate_log_points(
-		g1 = df %>% dplyr::pull(paste0(measure, exts[1])),
-		g2 = df %>% dplyr::pull(paste0(measure, exts[2])),
+		g1 = df %>% dplyr::pull(g1),
+		g2 = df %>% dplyr::pull(g2),
 		xaxis = xaxis
 	)
 
 	calculate_lines(df = ba, df_log = ba_log, opts)
 }
 
-full_opts <- function(df, measure, exts, ...) {
-	opts <- utils::modifyList(list(exts = c("_device", "_ref"), xaxis = "mean", log_transf = F,
+full_opts <- function(df, g1, g2, ...) {
+	opts <- utils::modifyList(list(xaxis = "mean", log_transf = F,
 																 CI.type = "classic", CI.level = 0.95,
 																 boot.type = "basic", boot.R = 1000),
-														c(list(exts = exts), list(...)))
+														list(...))
 
 	rlang::arg_match0(opts$xaxis, c("reference", "mean"))
 	rlang::arg_match0(opts$CI.type, c("classic", "boot"))
 	rlang::arg_match0(opts$boot.type, c("norm", "basic", "stud", "perc", "bca", "all"))
-	assertthat::assert_that(length(measure) == 1)
-	assertthat::assert_that(length(opts$exts) == 2)
+	assertthat::assert_that(length(g1) == length(g2) == 1)
 	assertthat::assert_that(opts$CI.level > 0 & opts$CI.level < 1)
 	assertthat::assert_that(opts$boot.R %% 1 == 0)
 
