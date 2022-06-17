@@ -3,6 +3,9 @@ ba_plot_data <- function(df, g1, g2, ...) {
 	opts <- full_opts(df, g1, g2, ...)
 	list2env(opts, envir = environment())
 
+	df <- df %>%
+		dplyr::filter(dplyr::if_all(c(g1, g2), ~ !is.na(.)))
+
 	ba <- calculate_points(
 		g1 = df[[g1]],
 		g2 = df[[g2]],
