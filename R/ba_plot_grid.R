@@ -1,7 +1,7 @@
 #' @export
 ba_plot_grid <- function(df, g1, g2, group = "",
 												 include_all = T, all_lab = "All", title = "",
-												 scales = "fixed", axes = "remove", ...) {
+												 scales = "fixed", axes = "remove", na.rm = T, na.replace = "NA", ...) {
 	rlang::arg_match0(scales, c("fixed", "free_x", "free_y", "free"))
 	rlang::arg_match0(axes, c("leave", "remove_x", "remove_y", "remove"))
 
@@ -18,6 +18,14 @@ ba_plot_grid <- function(df, g1, g2, group = "",
 		if (length(g2) > 1) {
 			stop("Either `group` must be empty or `g2` must be a single column name")
 		}
+	}
+
+	if (na.rm) {
+		df <- df %>%
+			dplyr::filter(dplyr::if_all(dplyr::all_of(group), ~ !is.na(.)))
+	} else {
+		df <- df %>%
+			dplyr::mutate(dplyr::across(dplyr::all_of(group), ~ tidyr::replace_na(., na.replace)))
 	}
 
 	if (include_all) {
