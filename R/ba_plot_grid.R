@@ -70,11 +70,6 @@ plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, ...) {
 																										~ .x == group_val)),
 											g1 = g1, g2 = g2, title = group_val, ...)
 
-	if (!is.null(opts$theme_fn)) {
-		p <- p +
-			rlang::exec(opts$theme_fn)
-	}
-
 	l <- length(unique(df[[group]]))
 	dims <- ggplot2::wrap_dims(l)
 

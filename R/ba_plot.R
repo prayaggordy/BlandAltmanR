@@ -27,7 +27,7 @@ ba_plot_worker <- function(df, g1, g2,
 		dplyr::mutate(color = as.character(stringr::str_starts(line, "m")),
 									linetype = as.character(stringr::str_ends(line, "m")))
 
-	ggplot2::ggplot(d, ggplot2::aes(x = size, y = diffs)) +
+	p <- ggplot2::ggplot(d, ggplot2::aes(x = size, y = diffs)) +
 		ggplot2::geom_line(ggplot2::aes(group = line, color = color, linetype = linetype, size = linetype, y = value),
 											 show.legend = F) +
 		ggplot2::geom_point(size = point_size) +
@@ -37,4 +37,11 @@ ba_plot_worker <- function(df, g1, g2,
 		rlang::exec(ggplot2::scale_x_continuous, !!!scale_x) +
 		rlang::exec(ggplot2::scale_y_continuous, !!!scale_y) +
 		rlang::exec(ggplot2::labs, !!!all_labs)
+
+	if (!is.null(opts$theme_fn)) {
+		p <- p +
+			rlang::exec(opts$theme_fn)
+	}
+
+	p
 }
