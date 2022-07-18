@@ -29,9 +29,16 @@ ba_plot_grid <- function(df, g1, g2, group = "",
 	}
 
 	if (include_all) {
-		df <- df %>%
-			dplyr::mutate(dplyr::across(dplyr::all_of(group), ~ all_lab)) %>%
-			dplyr::bind_rows(df)
+		if (is.factor(df[[group]])) {
+			df <- df %>%
+				dplyr::mutate(dplyr::across(dplyr::all_of(group),
+																		~ forcats::fct_relabel(., ~ rep(all_lab, length(levels(df[[group]])))))) %>%
+				dplyr::bind_rows(df)
+		} else {
+			df <- df %>%
+				dplyr::mutate(dplyr::across(dplyr::all_of(group), ~ all_lab)) %>%
+				dplyr::bind_rows(df)
+		}
 	}
 
 	# for each fixed axis, figure out the limits and breaks on the full df if not already given
@@ -46,6 +53,8 @@ ba_plot_grid <- function(df, g1, g2, group = "",
 
 	opts <- list(...)
 	opts[c(names(scales_x), names(scales_y))] <- NULL
+
+	print(levels(df[[group]]))
 
 	plots <- rlang::exec(
 		purrr::map,
