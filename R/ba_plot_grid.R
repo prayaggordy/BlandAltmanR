@@ -54,8 +54,6 @@ ba_plot_grid <- function(df, g1, g2, group = "",
 	opts <- list(...)
 	opts[c(names(scales_x), names(scales_y))] <- NULL
 
-	print(levels(df[[group]]))
-
 	plots <- rlang::exec(
 		purrr::map,
 		seq(length(unique(df[[group]]))),
