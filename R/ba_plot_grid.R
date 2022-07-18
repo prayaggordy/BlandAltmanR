@@ -63,7 +63,11 @@ plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, ...) {
 	opts <- list(...)
 	list2env(opts, envir = environment())
 
-	group_val <- unique(df[[group]])[group_val_idx]
+	if (is.factor(df[[group]])) {
+		group_val <- levels(df[[group]])[group_val_idx]
+	} else {
+		group_val <- unique(df[[group]])[group_val_idx]
+	}
 
 	p <- ba_plot_worker(df = df %>%
 												dplyr::filter(dplyr::if_any(dplyr::all_of(group),
