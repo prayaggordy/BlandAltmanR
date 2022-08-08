@@ -57,9 +57,9 @@ full_opts <- function(df, g1, g2, ...) {
 
 calculate_points <- function(g1, g2, xaxis) {
 	if (xaxis == "mean") {
-		data.frame(size = (g1 + g2)/2, diffs = g1 - g2)  # rename size to x, diffs to y
+		data.frame(size = (g1 + g2)/2, diffs = g2 - g1)  # rename size to x, diffs to y
 	} else {
-		data.frame(size = g2, diffs = g1 - g2)
+		data.frame(size = g2, diffs = g2 - g1)
 	}
 }
 
