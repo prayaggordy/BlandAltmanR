@@ -54,19 +54,21 @@ ba_plot_grid <- function(df, g1, g2, group = "",
 	opts <- list(...)
 	opts[c(names(scales_x), names(scales_y))] <- NULL
 
+	dims <- rlang::exec(ggplot2::wrap_dims, length(unique(df[[group]])), opts$nrow, opts$ncol)
+
 	plots <- rlang::exec(
 		purrr::map,
 		seq(length(unique(df[[group]]))),
 		plot_indiv,
 		df = df, g1 = g1, g2 = g2, group = group,
-		scales = scales, axes = axes,
+		scales = scales, axes = axes, dims = dims,
 		!!!scales_x, !!!scales_y, !!!opts
 	)
 
-	patchwork::wrap_plots(plots)
+	rlang::exec(patchwork::wrap_plots, plots, !!!dims)
 }
 
-plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, ...) {
+plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, dims, ...) {
 	opts <- list(...)
 	list2env(opts, envir = environment())
 
@@ -82,7 +84,6 @@ plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, ...) {
 											g1 = g1, g2 = g2, title = group_val, ...)
 
 	l <- length(unique(df[[group]]))
-	dims <- ggplot2::wrap_dims(l)
 
 	if (group_val_idx <= l - dims[2]) {
 		p <- p +
