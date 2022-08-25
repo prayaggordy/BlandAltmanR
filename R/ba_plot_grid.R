@@ -84,7 +84,7 @@ plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, dims, inc
 
 	if (include_void) {
 		if (d %>% dplyr::filter(dplyr::if_all(dplyr::all_of(c(g1, g2)), ~ !is.na(.))) %>% nrow == 0) {
-			return(ggplot2::ggplot() + ggplot2::theme_void())
+			return(ggplot2::ggplot() + ggplot2::theme(panel.background = ggplot2::element_blank()))
 		}
 	}
 
