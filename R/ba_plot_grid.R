@@ -1,6 +1,6 @@
 #' @export
 ba_plot_grid <- function(df, g1, g2, group = "",
-												 include_all = T, all_lab = "All", title = "",
+												 include_all = T, all_lab = "All", include_void = T, title = "",
 												 scales = "fixed", axes = "remove", na.rm = T, na.replace = "NA", ...) {
 	rlang::arg_match0(scales, c("fixed", "free_x", "free_y", "free"))
 	rlang::arg_match0(axes, c("leave", "remove_x", "remove_y", "remove"))
@@ -61,7 +61,7 @@ ba_plot_grid <- function(df, g1, g2, group = "",
 		seq(length(unique(df[[group]]))),
 		plot_indiv,
 		df = df, g1 = g1, g2 = g2, group = group,
-		scales = scales, axes = axes, dims = dims,
+		scales = scales, axes = axes, dims = dims, include_void = include_void,
 		!!!scales_x, !!!scales_y, !!!opts
 	)
 
@@ -69,7 +69,7 @@ ba_plot_grid <- function(df, g1, g2, group = "",
 	rlang::exec(patchwork::wrap_plots, plots, !!!dims)
 }
 
-plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, dims, ...) {
+plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, dims, include_void, ...) {
 	opts <- list(...)
 	list2env(opts, envir = environment())
 
@@ -79,10 +79,16 @@ plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, dims, ...
 		group_val <- unique(df[[group]])[group_val_idx]
 	}
 
-	p <- ba_plot_worker(df = df %>%
-												dplyr::filter(dplyr::if_any(dplyr::all_of(group),
-																										~ .x == group_val)),
-											g1 = g1, g2 = g2, title = group_val, ...)
+	d <- df %>%
+		dplyr::filter(dplyr::if_any(dplyr::all_of(group), ~ .x == group_val))
+
+	if (include_void) {
+		if (nrow(d) == 0) {
+			return(ggplot2::ggplot() + ggplot2::theme_void())
+		}
+	}
+
+	p <- ba_plot_worker(df = d, g1 = g1, g2 = g2, title = group_val, ...)
 
 	l <- length(unique(df[[group]]))
 
