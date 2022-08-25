@@ -65,6 +65,7 @@ ba_plot_grid <- function(df, g1, g2, group = "",
 		!!!scales_x, !!!scales_y, !!!opts
 	)
 
+	dims <- as.list(magrittr::set_names(dims, c("nrow", "ncol")))
 	rlang::exec(patchwork::wrap_plots, plots, !!!dims)
 }
 
