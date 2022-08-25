@@ -87,7 +87,9 @@ plot_indiv <- function(group_val_idx, df, g1, g2, group, scales, axes, dims, inc
 			p <- ggplot2::ggplot() +
 				ggplot2::theme(panel.background = ggplot2::element_blank())
 			if ("theme_fn" %in% names(opts)) {
-				p <- p + ggplot2::theme(axis.title.y = rlang::exec(ggplot2::element_text, !!!opts$theme_fn$axis.title.y))
+				p <- p +
+					ggplot2::theme(axis.title.y = rlang::exec(ggplot2::element_text,
+																										!!!rlang::exec(opts$theme_fn)$axis.title.y))
 			}
 			return(p + ggplot2::ylab(opts[["ylab"]]))
 		}
