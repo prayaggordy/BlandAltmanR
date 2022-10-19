@@ -12,11 +12,15 @@ mean_diff_pbT <- function(df, m, opts) {
 	list2env(opts, envir = environment())
 
 	if (CI.type == "classic"){
-		df %>%
+		ret <- df %>%
 			dplyr::bind_cols(
 				predict_regular(df = df, fit = m, CI.level = CI.level) %>%
 					dplyr::rename(m_m = fit, m_u = upr, m_l = lwr)
 			)
+
+		attr(ret, "plot_details") <- c(attr(ret, "plot_details"), list(mean_diff = m))
+
+		ret
 	} else {
 		fitted <- predict_boot(df = df, fit = m, CI.level = CI.level, boot.R = boot.R)
 
@@ -30,8 +34,12 @@ mean_diff_pbT <- function(df, m, opts) {
 }
 
 mean_diff_pbF <- function(df) {
-	df %>%
+	ret <- df %>%
 		dplyr::mutate(m_m = stats::t.test(df$diffs)[["estimate"]],
 									m_l = stats::t.test(df$diffs)[["conf.int"]][1],
 									m_u = stats::t.test(df$diffs)[["conf.int"]][2])
+
+	attr(ret, "plot_details") <- c(attr(ret, "plot_details"), list(mean_diff = stats::t.test(df$diffs)))
+
+	ret
 }

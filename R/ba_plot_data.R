@@ -36,7 +36,10 @@ ba_plot_data <- function(df, g1, g2, ...) {
 		ba_log$size <- ba_log$size %% (24*60)
 	}
 
-	calculate_lines(df = ba, df_log = ba_log, opts)
+	ret <- calculate_lines(df = ba, df_log = ba_log, opts)
+	attr(ret, "plot_details") <- c(attr(ret, "plot_details"), full_opts)
+
+	ret
 }
 
 full_opts <- function(df, g1, g2, ...) {
@@ -75,12 +78,16 @@ calculate_lines <- function(df, df_log, opts) {
 	pb <- check_b1(fit = m, df = df, opts = opts)
 	hs <- check_b1(fit = mRes, df = df, opts = opts)
 
-	mean_diff(df = df, m = m, pb = pb, opts) %>%
+	ret <- mean_diff(df = df, m = m, pb = pb, opts) %>%
 		LOAs(df = ., df_log = df_log, m = m, mRes = mRes, pb = pb, hs = hs, opts = opts) %>%
 		dplyr::select(size, diffs,
 									m_m, m_u, m_l,
 									u_m, u_u, u_l,
 									l_m, l_u, l_l)
+
+	attr(ret, "plot_details") <- c(attr(ret, "plot_details"), list(pb = pb, hs = hs))
+
+	ret
 }
 
 check_b1 <- function(fit, df, opts) {
