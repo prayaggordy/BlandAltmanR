@@ -37,7 +37,7 @@ ba_plot_data <- function(df, g1, g2, ...) {
 	}
 
 	ret <- calculate_lines(df = ba, df_log = ba_log, opts)
-	attr(ret, "plot_details") <- c(attr(ret, "plot_details"), full_opts)
+	attr(ret, "plot_details") <- c(attr(ret, "plot_details"), opts)
 
 	ret
 }
