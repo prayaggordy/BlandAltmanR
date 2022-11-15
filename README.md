@@ -1,5 +1,1 @@
-To-do
-
-- Document
-- Actually build the package
-- Add warnings using `rlang::abort` and `rlang::warn`
+Improving the code found here: https://sri-human-sleep.github.io/sleep-trackers-performance/AnalyticalPipeline_v1.0.0.html.
